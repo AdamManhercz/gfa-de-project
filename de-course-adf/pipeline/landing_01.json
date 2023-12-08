@@ -5,7 +5,14 @@
 			{
 				"name": "Stackoverflow answers",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Load date",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -59,7 +66,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Stackoverflow answers",
+						"activity": "Load date",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -236,14 +243,7 @@
 			{
 				"name": "Load date",
 				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Stackoverflow questions",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"secureOutput": false,
 					"secureInput": false
