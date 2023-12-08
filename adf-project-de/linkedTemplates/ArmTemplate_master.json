@@ -1,0 +1,84 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-project-de"
+		},
+		"github_conn_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'github_conn'"
+		},
+		"stackoverflow_conn_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'stackoverflow_conn'"
+		},
+		"storage_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'storage'"
+		},
+		"github_conn_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://decoursesacc.dfs.core.windows.net"
+		},
+		"rest_conn_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://de-course-ingest-api.azurewebsites.net/api/"
+		},
+		"storage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://projectaccde.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-project-de_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"github_conn_accountKey": {
+						"value": "[parameters('github_conn_accountKey')]"
+					},
+					"stackoverflow_conn_connectionString": {
+						"value": "[parameters('stackoverflow_conn_connectionString')]"
+					},
+					"storage_accountKey": {
+						"value": "[parameters('storage_accountKey')]"
+					},
+					"github_conn_properties_typeProperties_url": {
+						"value": "[parameters('github_conn_properties_typeProperties_url')]"
+					},
+					"rest_conn_properties_typeProperties_url": {
+						"value": "[parameters('rest_conn_properties_typeProperties_url')]"
+					},
+					"storage_properties_typeProperties_url": {
+						"value": "[parameters('storage_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
