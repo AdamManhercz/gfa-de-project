@@ -1,0 +1,9 @@
+{
+	"name": "adf-project-de",
+	"location": "switzerlandnorth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b0d43bf7-dfa7-4a54-819e-5d7b23c70a2a",
+		"tenantId": "31dfcdee-c4a6-4721-9d54-46c3b6605102"
+	}
+}
