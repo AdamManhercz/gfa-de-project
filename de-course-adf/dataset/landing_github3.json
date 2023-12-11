@@ -1,0 +1,60 @@
+{
+	"name": "landing_github3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "storage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_load_date": {
+				"type": "string",
+				"defaultValue": "20220930"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat('githubarchive_day_',dataset().p_load_date,'.json')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('github/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')\n",
+					"type": "Expression"
+				},
+				"fileSystem": "landing"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Organization": {
+					"type": "string"
+				},
+				"Repository account": {
+					"type": "string"
+				},
+				"Repository name": {
+					"type": "string"
+				},
+				"L1 type": {
+					"type": "string"
+				},
+				"L2 type": {
+					"type": "string"
+				},
+				"L3 type": {
+					"type": "string"
+				},
+				"Tags": {
+					"type": "string"
+				},
+				"Open source available": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
