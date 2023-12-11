@@ -1,0 +1,105 @@
+{
+	"name": "github_3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "github_conn",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_load_date": {
+				"type": "string",
+				"defaultValue": "20220930"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat('githubarchive_day_',dataset().p_load_date,'.json')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('github/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')\n",
+					"type": "Expression"
+				},
+				"fileSystem": "external"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"public": {
+					"type": "boolean"
+				},
+				"repo": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						}
+					}
+				},
+				"actor": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"login": {
+							"type": "string"
+						},
+						"gravatar_id": {
+							"type": "string"
+						},
+						"avatar_url": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						}
+					}
+				},
+				"org": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"login": {
+							"type": "string"
+						},
+						"gravatar_id": {
+							"type": "string"
+						},
+						"avatar_url": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						}
+					}
+				},
+				"created_at": {
+					"type": "string"
+				},
+				"other": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
