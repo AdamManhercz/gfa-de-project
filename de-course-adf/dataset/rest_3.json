@@ -1,0 +1,24 @@
+{
+	"name": "rest_3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "rest_conn",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_load_date": {
+				"type": "string",
+				"defaultValue": "20220930"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@concat('get_company_data_api?p_load_date=',dataset().p_load_date)",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
