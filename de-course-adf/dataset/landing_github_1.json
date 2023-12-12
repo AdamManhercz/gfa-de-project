@@ -20,10 +20,7 @@
 					"value": "@concat('githubarchive_day_',dataset().p_load_date,'.json')",
 					"type": "Expression"
 				},
-				"folderPath": {
-					"value": "@concat('github/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')",
-					"type": "Expression"
-				},
+				"folderPath": "github",
 				"fileSystem": "landing"
 			}
 		},
