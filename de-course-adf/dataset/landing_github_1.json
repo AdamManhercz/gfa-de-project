@@ -7,8 +7,7 @@
 		},
 		"parameters": {
 			"p_load_date": {
-				"type": "string",
-				"defaultValue": "20220731"
+				"type": "string"
 			}
 		},
 		"annotations": [],
