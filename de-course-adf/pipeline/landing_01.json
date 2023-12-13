@@ -183,7 +183,10 @@
 				"inputs": [
 					{
 						"referenceName": "github_1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_load_date": "20220731"
+						}
 					}
 				],
 				"outputs": [
@@ -254,7 +257,13 @@
 				"outputs": [
 					{
 						"referenceName": "landing_rest_1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_load_date": {
+								"value": "@variables('v_load_date')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},
