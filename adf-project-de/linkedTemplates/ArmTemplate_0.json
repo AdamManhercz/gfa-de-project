@@ -133,18 +133,18 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/landing_github_1')]",
+			"name": "[concat(parameters('factoryName'), '/github_2')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "storage",
+					"referenceName": "github_conn",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
 					"p_load_date": {
 						"type": "string",
-						"defaultValue": "20220731"
+						"defaultValue": "20220831"
 					}
 				},
 				"annotations": [],
@@ -157,10 +157,485 @@
 							"type": "Expression"
 						},
 						"folderPath": "github",
+						"fileSystem": "external"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"type": {
+							"type": "string"
+						},
+						"public": {
+							"type": "boolean"
+						},
+						"repo": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"url": {
+									"type": "string"
+								}
+							}
+						},
+						"actor": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"login": {
+									"type": "string"
+								},
+								"gravatar_id": {
+									"type": "string"
+								},
+								"avatar_url": {
+									"type": "string"
+								},
+								"url": {
+									"type": "string"
+								}
+							}
+						},
+						"org": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"login": {
+									"type": "string"
+								},
+								"gravatar_id": {
+									"type": "string"
+								},
+								"avatar_url": {
+									"type": "string"
+								},
+								"url": {
+									"type": "string"
+								}
+							}
+						},
+						"created_at": {
+							"type": "string"
+						},
+						"other": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/github_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/github_3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "github_conn",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220930"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('githubarchive_day_',dataset().p_load_date,'.json')",
+							"type": "Expression"
+						},
+						"folderPath": "github",
+						"fileSystem": "external"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"type": {
+							"type": "string"
+						},
+						"public": {
+							"type": "boolean"
+						},
+						"repo": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"url": {
+									"type": "string"
+								}
+							}
+						},
+						"actor": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"login": {
+									"type": "string"
+								},
+								"gravatar_id": {
+									"type": "string"
+								},
+								"avatar_url": {
+									"type": "string"
+								},
+								"url": {
+									"type": "string"
+								}
+							}
+						},
+						"org": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"login": {
+									"type": "string"
+								},
+								"gravatar_id": {
+									"type": "string"
+								},
+								"avatar_url": {
+									"type": "string"
+								},
+								"url": {
+									"type": "string"
+								}
+							}
+						},
+						"created_at": {
+							"type": "string"
+						},
+						"other": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/github_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/landing_github2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "storage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220831"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('githubarchive_day_',dataset().p_load_date, '.json')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('github/',substring(dataset().p_load_date, 0,4),'/' ,substring(dataset().p_load_date, 4,2),'/',substring(dataset().p_load_date, 6,2),'/')\n",
+							"type": "Expression"
+						},
+						"fileSystem": "landing"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"Organization": {
+							"type": "string"
+						},
+						"Repository account": {
+							"type": "string"
+						},
+						"Repository name": {
+							"type": "string"
+						},
+						"L1 type": {
+							"type": "string"
+						},
+						"L2 type": {
+							"type": "string"
+						},
+						"L3 type": {
+							"type": "string"
+						},
+						"Tags": {
+							"type": "string"
+						},
+						"Open source available": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/landing_github3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "storage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220930"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('githubarchive_day_',dataset().p_load_date,'.json')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('github/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')\n",
+							"type": "Expression"
+						},
+						"fileSystem": "landing"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"Organization": {
+							"type": "string"
+						},
+						"Repository account": {
+							"type": "string"
+						},
+						"Repository name": {
+							"type": "string"
+						},
+						"L1 type": {
+							"type": "string"
+						},
+						"L2 type": {
+							"type": "string"
+						},
+						"L3 type": {
+							"type": "string"
+						},
+						"Tags": {
+							"type": "string"
+						},
+						"Open source available": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/landing_github_1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "storage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('githubarchive_day_',dataset().p_load_date,'.json')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('github/',substring(dataset().p_load_date, 0,4),'/' ,substring(dataset().p_load_date, 4,2),'/',substring(dataset().p_load_date, 6,2),'/')",
+							"type": "Expression"
+						},
 						"fileSystem": "landing"
 					}
 				},
 				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/landing_rest2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "storage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220831"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('company_detail_',dataset().p_load_date,'.json')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('company_detail/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')\n",
+							"type": "Expression"
+						},
+						"fileSystem": "landing"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"Organization": {
+							"type": "string"
+						},
+						"Repository account": {
+							"type": "string"
+						},
+						"Repository name": {
+							"type": "string"
+						},
+						"L1 type": {
+							"type": "string"
+						},
+						"L2 type": {
+							"type": "string"
+						},
+						"L3 type": {
+							"type": "string"
+						},
+						"Tags": {
+							"type": "string"
+						},
+						"Open source available": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/landing_rest3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "storage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('company_detail_',dataset().p_load_date,'.json')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('company_detail/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')\n",
+							"type": "Expression"
+						},
+						"fileSystem": "landing"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"Organization": {
+							"type": "string"
+						},
+						"Repository account": {
+							"type": "string"
+						},
+						"Repository name": {
+							"type": "string"
+						},
+						"L1 type": {
+							"type": "string"
+						},
+						"L2 type": {
+							"type": "string"
+						},
+						"L3 type": {
+							"type": "string"
+						},
+						"Tags": {
+							"type": "string"
+						},
+						"Open source available": {
+							"type": "string"
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/storage')]"
@@ -177,8 +652,7 @@
 				},
 				"parameters": {
 					"p_load_date": {
-						"type": "string",
-						"defaultValue": "20220731"
+						"type": "string"
 					}
 				},
 				"annotations": [],
@@ -190,7 +664,10 @@
 							"value": "@concat('company_detail_',dataset().p_load_date,'.json')",
 							"type": "Expression"
 						},
-						"folderPath": "company_detail",
+						"folderPath": {
+							"value": "@concat('company_detail/', substring(dataset().p_load_date, 0,4), '/',substring(dataset().p_load_date, 4,2), '/', substring(dataset().p_load_date, 6,2), '/')",
+							"type": "Expression"
+						},
 						"fileSystem": "landing"
 					}
 				},
@@ -213,6 +690,64 @@
 					"p_load_date": {
 						"type": "string",
 						"defaultValue": "20220731"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('get_company_data_api?p_load_date=',dataset().p_load_date)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/rest_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/rest_2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "rest_conn",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220831"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@concat('get_company_data_api?p_load_date=',dataset().p_load_date)",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/rest_conn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/rest_3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "rest_conn",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220930"
 					}
 				},
 				"annotations": [],
@@ -497,301 +1032,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/stackoverflow_conn')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/landing_01')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Stackoverflow answers",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Load date",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlDWSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "stackoverflow_answers",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "stack_answers",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "Stackoverflow questions",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Load date",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlDWSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "stackovdrflow_questions",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "stack_questions",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "Github_1",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Load date",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "JsonSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "JsonReadSettings"
-								}
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "github_1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "landing_github_1",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_load_date": {
-										"value": "@variables('v_load_date')",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					},
-					{
-						"name": "Rest_1",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Load date",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET",
-								"paginationRules": {
-									"supportRFC5988": "true"
-								}
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "rest_1",
-								"type": "DatasetReference",
-								"parameters": {
-									"p_load_date": {
-										"value": "@variables('v_load_date')",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "landing_rest_1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "Load date",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "v_load_date",
-							"value": {
-								"value": "@coalesce(pipeline().parameters.p_load_date, formatDateTime(addDays(pipeline().parameters.p_load_date, -1), 'yyyyMMdd'))",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"p_load_date": {
-						"type": "string",
-						"defaultValue": "20220731"
-					}
-				},
-				"variables": {
-					"v_load_date": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/stackoverflow_answers')]",
-				"[concat(variables('factoryId'), '/datasets/stack_answers')]",
-				"[concat(variables('factoryId'), '/datasets/stackovdrflow_questions')]",
-				"[concat(variables('factoryId'), '/datasets/stack_questions')]",
-				"[concat(variables('factoryId'), '/datasets/github_1')]",
-				"[concat(variables('factoryId'), '/datasets/landing_github_1')]",
-				"[concat(variables('factoryId'), '/datasets/rest_1')]",
-				"[concat(variables('factoryId'), '/datasets/landing_rest_1')]"
 			]
 		}
 	]
