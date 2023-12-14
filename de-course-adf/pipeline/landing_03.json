@@ -142,8 +142,7 @@
 		],
 		"parameters": {
 			"p_load_date": {
-				"type": "string",
-				"defaultValue": "20220930"
+				"type": "string"
 			}
 		},
 		"variables": {
