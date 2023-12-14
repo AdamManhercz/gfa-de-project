@@ -13,6 +13,108 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/stackoverflow_answers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "stackoverflow_conn",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "accepted_answer_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "answer_count",
+						"type": "nvarchar"
+					},
+					{
+						"name": "comment_count",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "community_owned_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "creation_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "favorite_count",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_activity_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_edit_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_editor_display_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_editor_user_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "owner_display_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "owner_user_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "parent_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "post_type_id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "score",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "tags",
+						"type": "nvarchar"
+					},
+					{
+						"name": "view_count",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "stackoverflow",
+					"table": "stackoverflow_post_answers"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/landing_01')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -310,8 +412,7 @@
 				},
 				"parameters": {
 					"p_load_date": {
-						"type": "string",
-						"defaultValue": "20220731"
+						"type": "string"
 					}
 				},
 				"variables": {
@@ -321,7 +422,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/stackoverflow_answers')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/landing_02')]",
@@ -472,8 +575,7 @@
 				},
 				"parameters": {
 					"p_load_date": {
-						"type": "string",
-						"defaultValue": "20220831"
+						"type": "string"
 					}
 				},
 				"variables": {
@@ -634,8 +736,7 @@
 				},
 				"parameters": {
 					"p_load_date": {
-						"type": "string",
-						"defaultValue": "20220930"
+						"type": "string"
 					}
 				},
 				"variables": {
@@ -656,7 +757,14 @@
 					{
 						"name": "landing_1",
 						"type": "ExecutePipeline",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
@@ -664,13 +772,25 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"p_load_date": {
+									"value": "@variables('v_load_date')",
+									"type": "Expression"
+								}
+							}
 						}
 					},
 					{
 						"name": "landing_2",
 						"type": "ExecutePipeline",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
@@ -678,13 +798,25 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"p_load_date": {
+									"value": "@replace(variables('v_load_date'), '07','08')",
+									"type": "Expression"
+								}
+							}
 						}
 					},
 					{
 						"name": "landing_3",
 						"type": "ExecutePipeline",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
@@ -692,7 +824,99 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
+							"parameters": {
+								"p_load_date": {
+									"value": "@replace(variables('v_load_date'), '0731','0930')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "v_load_date",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.p_load_date, formatDateTime(addDays(pipeline().parameters.p_load_date, -1), 'yyyyMMdd'))",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_load_date": {
+						"type": "string",
+						"defaultValue": "20220731"
+					}
+				},
+				"variables": {
+					"v_load_date": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/landing_01')]",
+				"[concat(variables('factoryId'), '/pipelines/landing_02')]",
+				"[concat(variables('factoryId'), '/pipelines/landing_03')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/master')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ingestion_to_landing",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Ingestion",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
 							"parameters": {}
+						}
+					},
+					{
+						"name": "Landing_to_bronze",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "Ingestion_to_landing",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/manhercz.adam@gmail.com/gfa-de-project/etl/landing_to_bronze"
+						},
+						"linkedServiceName": {
+							"referenceName": "databricks_conn",
+							"type": "LinkedServiceReference"
 						}
 					}
 				],
@@ -702,9 +926,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/landing_01')]",
-				"[concat(variables('factoryId'), '/pipelines/landing_02')]",
-				"[concat(variables('factoryId'), '/pipelines/landing_03')]"
+				"[concat(variables('factoryId'), '/pipelines/Ingestion')]"
 			]
 		}
 	]

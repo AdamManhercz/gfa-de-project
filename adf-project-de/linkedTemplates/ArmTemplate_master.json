@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-project-de"
 		},
+		"databricks_conn_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'databricks_conn'"
+		},
 		"github_conn_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'github_conn'"
@@ -57,6 +61,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"databricks_conn_accessToken": {
+						"value": "[parameters('databricks_conn_accessToken')]"
 					},
 					"github_conn_accountKey": {
 						"value": "[parameters('github_conn_accountKey')]"

@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "adf-project-de"
 		},
+		"databricks_conn_accessToken": {
+			"value": ""
+		},
 		"github_conn_accountKey": {
 			"value": ""
 		},
