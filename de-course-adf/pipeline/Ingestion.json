@@ -19,7 +19,13 @@
 						"referenceName": "landing_01",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_load_date": {
+							"value": "@variables('v_load_date')",
+							"type": "Expression"
+						}
+					}
 				}
 			},
 			{
