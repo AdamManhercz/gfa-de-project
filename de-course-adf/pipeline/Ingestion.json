@@ -5,7 +5,14 @@
 			{
 				"name": "landing_1",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -18,30 +25,84 @@
 			{
 				"name": "landing_2",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "landing_02",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_load_date": {
+							"value": "@replace(variables('v_load_date'), '07','08')",
+							"type": "Expression"
+						}
+					}
 				}
 			},
 			{
 				"name": "landing_3",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "landing_03",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_load_date": {
+							"value": "@replace(variables('v_load_date'), '0731','0930')",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_load_date",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.p_load_date, formatDateTime(addDays(pipeline().parameters.p_load_date, -1), 'yyyyMMdd'))",
+						"type": "Expression"
+					}
 				}
 			}
 		],
+		"parameters": {
+			"p_load_date": {
+				"type": "string",
+				"defaultValue": "20220731"
+			}
+		},
+		"variables": {
+			"v_load_date": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
